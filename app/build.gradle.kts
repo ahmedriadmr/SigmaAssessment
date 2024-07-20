@@ -5,6 +5,7 @@ plugins {
     kotlin("kapt")
     kotlin("plugin.serialization") version "2.0.0"
     id("com.google.dagger.hilt.android")
+    id ("kotlin-parcelize")
 }
 
 android {
@@ -77,6 +78,9 @@ dependencies {
 
     //Serialization
     implementation(libs.kotlinx.serialization.json)
+
+    //Parcelization
+    implementation (libs.kotlin.stdlib)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

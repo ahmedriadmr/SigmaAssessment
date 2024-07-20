@@ -1,8 +1,11 @@
 package com.example.sigmaassessment.profile_details.data.model
 
+import android.os.Parcelable
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @JsonClass(generateAdapter = true) // Enables code generation for better performance
 data class ProfileDataSet(
     @Json(name = "serviceNumber") val serviceNumber: String = "",
@@ -19,4 +22,4 @@ data class ProfileDataSet(
     @Json(name = "certificateId") val certificateId: String = "",
     @Json(name = "dateOfBirth") val dateOfBirth: String = "",
     @Json(name = "msg") val msg: String? = null
-)
+) : Parcelable

@@ -3,6 +3,7 @@ package com.example.sigmaassessment.profile_details.presentation
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sigmaassessment.core.domain.util.Result
@@ -15,14 +16,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileDetailsViewModel @Inject constructor(private val profileUseCase: GetProfileUseCase) : ViewModel() {
+class ProfileDetailsViewModel @Inject constructor(
+    private val profileUseCase: GetProfileUseCase,
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
-    var state by mutableStateOf(ProfileDetailsState())
+    var state by mutableStateOf(savedStateHandle.get<ProfileDetailsState>("profileDetailsState") ?: ProfileDetailsState())
         private set
 
     private val eventChannel = Channel<ProfileDetailsEvent>()
     val events = eventChannel.receiveAsFlow()
-
 
     init {
         fetchProfileInfo()
@@ -34,9 +37,9 @@ class ProfileDetailsViewModel @Inject constructor(private val profileUseCase: Ge
                 is Result.Error -> {
                     eventChannel.send(ProfileDetailsEvent.Error(result.error.asUiText()))
                 }
-
                 is Result.Success -> {
                     state = state.copy(data = result.data)
+                    savedStateHandle["profileDetailsState"] = state
                 }
             }
         }
